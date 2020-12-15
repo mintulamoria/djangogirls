@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
     </head>
     <body>
         <div>
@@ -23,7 +24,6 @@
                 <img src="{{ post.cover.url}}" alt="{{ post.title }}">
                 {% else %}
                 <p></p>
-                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
                 {% endif %}
 	            <p>{{ post.text|linebreaksbr }}</p>
 	        </div>

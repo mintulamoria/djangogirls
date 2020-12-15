@@ -29,6 +29,7 @@ class UploadFileForm(forms.Form):
 	file = forms.FileField()
 
 class CommentForm(forms.ModelForm):
+
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'body')
+        fields = ('author', 'text',)

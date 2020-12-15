@@ -23,6 +23,7 @@
                 <img src="{{ post.cover.url}}" alt="{{ post.title }}">
                 {% else %}
                 <p></p>
+                <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
                 {% endif %}
 	            <p>{{ post.text|linebreaksbr }}</p>
 	        </div>

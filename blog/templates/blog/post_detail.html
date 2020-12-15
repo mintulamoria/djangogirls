@@ -13,50 +13,22 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 card mb-4  mt-3 left  top">
-                    <div class="card-body">
-                        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
-                        <p class="card-text ">{{ post.content | safe }}</p>
-                    </div>
-                </div>
-    {% block sidebar %} 
-    {% endblock sidebar %}
-                <div class="col-md-8 card mb-4  mt-3 ">
-            <div class="card-body">
-        <!-- comments -->
-        <h3>{{ comments.count }} comments</h3>
-        {% for comment in comments %}
-            <div class="comments" style="padding: 10px;">
-              <p class="font-weight-bold">
-                {{ comment.name }}
-                <span class=" text-muted font-weight-normal">
-                  {{ comment.created_on }}
-                </span>
-              </p>
-              {{ comment.body | linebreaks }}
-            </div>
-        {% endfor %}
-
+    {% for comment in post.comments.all %}
+    {% if user.is_authenticated or comment.approved_comment %}
+    <div class="comment">
+        <div class="date">
+            {{ comment.created_date }}
+            {% if not comment.approved_comment %}
+                <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+            {% endif %}
         </div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+        <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
     </div>
-    <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
-        {% if new_comment %}
-        <div class="alert alert-success" role="alert">
-          Your comment is awaiting moderation
-        </div>
-        {% else %}
-        <h4>Leave a comment</h4>
-        <form method="post" style="margin-top: 1.3em;">
-          {{ comment_form.as_p }}
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
-        </form>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>    
+    {% endif %}
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
 {% endblock %}
